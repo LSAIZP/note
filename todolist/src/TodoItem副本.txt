@@ -1,0 +1,50 @@
+import  React, {Component} from 'react';
+import PropTypes from 'prop-types';
+
+class TodoItem extends Component{
+
+    constructor(props){
+        super(props);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    render(){
+        const {test,content} = this.props;
+        // JSX -> createElement -> 虚拟DOM(JS对象) -> 真实的DOM 
+        // JSX -> JS对象(比如虚拟DOM) -> 真实的DOM 
+        return (
+            <div onClick={this.handleClick}>
+                {test}-{content}
+            </div>)
+    }
+
+    handleClick(){
+        const {deleteItem,index} = this.props;
+        deleteItem(index);
+    }
+
+    // 当一个组件要从父组件接收参数的时候
+    // 如果这个组件第一次存在于父组件中，不会执行
+    // 如果这个组件之前已经存在于父组件中，当父组件的render函数运行时，它才会执行
+    componentWillReceiveProps(){
+        console.log('child componentWillReceiveProps');
+    }
+
+    // 当这个组件即将被从页面中剔除的时候，会被执行
+    componentWillUnmount(){
+         console.log('child componentWillUnmount');
+     }
+}
+
+TodoItem.propTypes = {
+    test: PropTypes.string.isRequired,
+    content: PropTypes.oneOfType([PropTypes.number,PropTypes.string]),
+    deleteItem: PropTypes.func,
+    index: PropTypes.oneOfType([PropTypes.number,PropTypes.string])
+}
+
+TodoItem.defaultProps = {
+    test: "hello world"
+}
+
+export default TodoItem;

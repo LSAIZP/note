@@ -1,0 +1,121 @@
+import React, { Component,Fragment} from 'react';
+import './style.css';
+import TodoItem from './TodoItem';
+
+class TodoList extends Component{
+    constructor(props){
+        super(props);
+        //当组件的state或者props发生改变的时候，render函数就会重新执行
+        //state存储组件里的数据
+        this.state={
+            inputValue:'',
+            list:[]
+        }
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleBtnClick = this.handleBtnClick.bind(this);
+        this.handleItemDelete = this.handleItemDelete.bind(this);
+    }
+
+    // 在组件即将被挂载到页面的时刻自动执行
+    componentWillMount(){
+        console.log ('componentWillMount');
+    }
+    render(){
+        console.log('render');
+        return(
+            <Fragment>
+                {/*组件*/}
+                {
+                    //元素
+                }
+                <div>
+                    <label htmlFor="insertArea">输入内容</label>
+                    <input id="insertArea" className="input" value={this.state.inputValue} 
+                    onChange={this.handleInputChange}
+                    ref={(input) => {this.input = input}}
+                    />
+                    <button onClick={this.handleBtnClick}>添加</button>
+                </div>
+                <ul>
+                    {this.getTodoItem()}
+                </ul>
+            </Fragment>
+        );
+    }
+
+    // 组件被挂载到页面之后，自动被执行
+    componentDidMount(){
+        console.log('componentDidMount');
+    }
+
+    // 组件被更新之前，它会自动被执行
+    shouldComponentUpdate(){
+        console.log('shouldComponentUpdate');
+        return true;
+    }
+
+    // 组件被更新之前，它会自动执行，但是它在shouldComponentUpdate之后执行
+    // 如果shouldComponentUpdate返回true它才执行
+    // 如果返回false，这个函数就不会被执行了。
+    componentWillUpdate(){
+        console.log('componentWillUpdate');
+    }
+
+    // 组件完成更新之后，它会被执行
+    componentDidUpdate(){
+        console.log('componentDidUpdate');
+    }
+
+    getTodoItem(){
+        return this.state.list.map((item, index) => {
+            return (
+                <div key={item}>
+                    <TodoItem 
+                        content={item} 
+                        index={index}
+                        deleteItem={this.handleItemDelete}
+                    />
+                    {/*<li key={index} 
+                    onClick={this.handleItemDelete.bind(this,index)}
+                    dangerouslySetInnerHTML={{__html: item}}
+                    >
+                    </li>   注释外层要加元素(div)*/}
+                </div>
+            )
+        })
+    }
+
+    //传入对象e
+    handleInputChange(){
+        //console.log(e.target);
+        const value = this.input.value;
+        this.setState(() => ({
+            inputValue: value
+        }))
+
+        // this.setState({
+        //     inputValue: e.target.value
+        // })
+        //console.log(this);
+    }
+
+    handleBtnClick(){
+        this.setState((prevState)=>({
+            //...展开list数组  prevState=this.state
+            list: [...prevState.list, prevState.inputValue],
+            inputValue: ''
+        }))
+    }
+
+    handleItemDelete(index){
+        //console.log(index);
+        //immutable：state 不允许我们做任何的改变
+        this.setState((prevState)=>{
+            const list = [...prevState.list];
+            list.splice(index,1);
+            return {list}
+        });
+    }
+}
+
+export default TodoList;

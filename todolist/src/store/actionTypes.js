@@ -1,0 +1,1 @@
+export const actionArr = ['change_input_value','add_todo_item','delete_todo_item','init_list_action','get_init_list'];
